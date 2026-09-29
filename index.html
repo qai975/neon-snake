@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Snake - Free Online Snake Game</title>
+  <meta name="description" content="Play Neon Snake free in your browser. Swipe to move, eat food and beat your high score.">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: Arial, sans-serif; background: #070b16; color: #e8ecf5; text-align: center; padding: 20px 16px 40px; min-height: 100vh; }
+    .glow { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 10% 10%, rgba(10,125,59,0.45), transparent 45%), radial-gradient(circle at 90% 90%, rgba(139,63,217,0.45), transparent 45%); }
+    h1 { font-size: 30px; background: linear-gradient(90deg, #35d07f, #4da3ff, #b57bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .sub { margin: 6px 0 14px; color: #9aa6c2; font-size: 14px; }
+    .bar { display: flex; justify-content: center; gap: 12px; margin-bottom: 12px; }
+    .pill { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 30px; padding: 8px 18px; font-size: 14px; }
+    .pill b { font-size: 18px; color: #7dffb8; margin-left: 4px; }
+    .wrap { position: relative; width: fit-content; margin: 0 auto; }
+    canvas { display: block; border-radius: 18px; border: 2px solid rgba(77,163,255,0.5); box-shadow: 0 0 30px rgba(77,163,255,0.25); touch-action: none; }
+    #ov { position: absolute; inset: 0; border-radius: 18px; background: rgba(7,11,22,0.78); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+    #ov h2 { font-size: 26px; color: #fff; }
+    #ov p { color: #9aa6c2; font-size: 14px; padding: 0 20px; }
+    .btn { border: none; border-radius: 30px; padding: 13px 34px; font-size: 17px; color: #fff; background: linear-gradient(90deg, #0a7d3b, #1e6fd9); }
+    .btn.alt { background: rgba(255,255,255,0.12); padding: 10px 24px; font-size: 14px; }
+    .pad { display: grid; grid-template-columns: repeat(3, 62px); grid-template-rows: repeat(2, 56px); gap: 8px; justify-content: center; margin-top: 16px; }
+    .pad button { border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; background: rgba(255,255,255,0.08); color: #fff; font-size: 22px; }
+    .pad button:active { background: rgba(77,163,255,0.35); }
+    .up { grid-column: 2; grid-row: 1; }
+    .left { grid-column: 1; grid-row: 2; }
+    .down { grid-column: 2; grid-row: 2; }
+    .right { grid-column: 3; grid-row: 2; }
+    .tip { margin-top: 12px; font-size: 12px; color: #8a96b3; }
+    footer { margin-top: 24px; font-size: 14px; color: #8a96b3; line-height: 1.8; }
+    footer b { color: #fff; }
+    footer a { color: #4da3ff; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <h1>Neon Snake</h1>
+  <div class="sub">Swipe on the board to move</div>
+
+  <div class="bar">
+    <div class="pill">Score <b id="score">0</b></div>
+    <div class="pill">Best <b id="best">0</b></div>
+  </div>
+
+  <div class="wrap">
+    <canvas id="c"></canvas>
+    <div id="ov">
+      <h2 id="ovt">Ready?</h2>
+      <p id="ovp">Eat the glowing food. Do not hit the walls or yourself.</p>
+      <button class="btn" id="play">Play</button>
+      <button class="btn alt" id="share" style="display:none">Share my score</button>
+    </div>
+  </div>
+
+  <div class="pad">
+    <button class="up" aria-label="Up" id="bu">&#9650;</button>
+    <button class="left" aria-label="Left" id="bl">&#9664;</button>
+    <button class="down" aria-label="Down" id="bd">&#9660;</button>
+    <button class="right" aria-label="Right" id="br">&#9654;</button>
+  </div>
+  <div class="tip">Arrow keys or WASD also work on a computer.</div>
+
+  <footer>Made by <b>Muhammad Qais Raza</b><br>Computer Science Student, University of Lahore<br><a href="https://qai975.github.io/My-first-repository">View my portfolio</a></footer>
+
+  <script>
+    var N = 20;
+    var S = Math.floor(Math.min(360, window.innerWidth - 36) / N) * N;
+    var cell = S / N;
+    var cv = document.getElementById('c');
+    cv.width = S; cv.height = S;
+    var ctx = cv.getContext('2d');
+
+    var snake, dir, nd, food, score, speed, timer, running = false;
+    var best = 0;
+    try { best = parseInt(localStorage.getItem('snakeBest'), 10) || 0; } catch (e) { best = 0; }
+    document.getElementById('best').textContent = best;
+
+    function placeFood() {
+      while (true) {
+        var f = { x: Math.floor(Math.random() * N), y: Math.floor(Math.random() * N) };
+        var ok = true;
+        for (var i = 0; i < snake.length; i++) { if (snake[i].x === f.x && snake[i].y === f.y) { ok = false; break; } }
+        if (ok) { food = f; return; }
+      }
+    }
+
+    function start() {
+      snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+      dir = { x: 1, y: 0 }; nd = dir;
+      score = 0; speed = 140;
+      document.getElementById('score').textContent = 0;
+      placeFood();
+      running = true;
+      document.getElementById('ov').style.display = 'none';
+      clearInterval(timer);
+      timer = setInterval(tick, speed);
+      draw();
+    }
+
+    function setDir(x, y) {
+      if (!running) return;
+      if (x === -dir.x && y === -dir.y) return;
+      nd = { x: x, y: y };
+    }
+
+    function tick() {
+      dir = nd;
+      var h = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+      if (h.x < 0 || h.y < 0 || h.x >= N || h.y >= N) return over();
+      for (var i = 0; i < snake.length; i++) { if (snake[i].x === h.x && snake[i].y === h.y) return over(); }
+      snake.unshift(h);
+      if (h.x === food.x && h.y === food.y) {
+        score++;
+        document.getElementById('score').textContent = score;
+        placeFood();
+        if (score % 5 === 0 && speed > 70) {
+          speed -= 10;
+          clearInterval(timer);
+          timer = setInterval(tick, speed);
+        }
+      } else {
+        snake.pop();
+      }
+      draw();
+    }
+
+    function over() {
+      running = false;
+      clearInterval(timer);
+      if (score > best) {
+        best = score;
+        document.getElementById('best').textContent = best;
+        try { localStorage.setItem('snakeBest', best); } catch (e) {}
+      }
+      document.getElementById('ovt').textContent = 'Game over';
+      document.getElementById('ovp').textContent = 'Your score: ' + score + '  |  Best: ' + best;
+      document.getElementById('play').textContent = 'Play again';
+      if (navigator.share) document.getElementById('share').style.display = 'block';
+      document.getElementById('ov').style.display = 'flex';
+    }
+
+    function draw() {
+      ctx.fillStyle = '#0b1020';
+      ctx.fillRect(0, 0, S, S);
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.lineWidth = 1;
+      for (var i = 1; i < N; i++) {
+        ctx.beginPath(); ctx.moveTo(i * cell, 0); ctx.lineTo(i * cell, S); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, i * cell); ctx.lineTo(S, i * cell); ctx.stroke();
+      }
+      ctx.shadowColor = '#f39c12';
+      ctx.shadowBlur = 14;
+      ctx.fillStyle = '#f39c12';
+      ctx.beginPath();
+      ctx.arc(food.x * cell + cell / 2, food.y * cell + cell / 2, cell * 0.36, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      for (var j = snake.length - 1; j >= 0; j--) {
+        var hue = 150 + (j * 6) % 120;
+        ctx.fillStyle = j === 0 ? '#ffffff' : 'hsl(' + hue + ',80%,55%)';
+        var p = 2;
+        ctx.fillRect(snake[j].x * cell + p, snake[j].y * cell + p, cell - p * 2, cell - p * 2);
+      }
+    }
+
+    document.getElementById('play').onclick = start;
+    document.getElementById('bu').onclick = function () { setDir(0, -1); };
+    document.getElementById('bd').onclick = function () { setDir(0, 1); };
+    document.getElementById('bl').onclick = function () { setDir(-1, 0); };
+    document.getElementById('br').onclick = function () { setDir(1, 0); };
+
+    document.getElementById('share').onclick = function () {
+      navigator.share({ title: 'Neon Snake', text: 'I scored ' + score + ' in Neon Snake. Can you beat me?', url: location.href });
+    };
+
+    document.addEventListener('keydown', function (e) {
+      var k = e.key;
+      if (k === 'ArrowUp' || k === 'w' || k === 'W') { setDir(0, -1); e.preventDefault(); }
+      else if (k === 'ArrowDown' || k === 's' || k === 'S') { setDir(0, 1); e.preventDefault(); }
+      else if (k === 'ArrowLeft' || k === 'a' || k === 'A') { setDir(-1, 0); e.preventDefault(); }
+      else if (k === 'ArrowRight' || k === 'd' || k === 'D') { setDir(1, 0); e.preventDefault(); }
+    });
+
+    var sx = 0, sy = 0;
+    cv.addEventListener('touchstart', function (e) {
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+      e.preventDefault();
+    }, { passive: false });
+    cv.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - sx;
+      var dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) < 15 && Math.abs(dy) < 15) return;
+      if (Math.abs(dx) > Math.abs(dy)) setDir(dx > 0 ? 1 : -1, 0);
+      else setDir(0, dy > 0 ? 1 : -1);
+      e.preventDefault();
+    }, { passive: false });
+
+    snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+    dir = { x: 1, y: 0 }; nd = dir;
+    food = { x: 15, y: 10 };
+    draw();
+  </script>
+</body>
+</html>
