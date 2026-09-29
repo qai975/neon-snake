@@ -3,320 +3,134 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neon Snake - Free Online Snake Game</title>
-  <meta name="description" content="Play Neon Snake free in your browser. Swipe to move, eat food and beat your high score.">
+  <title>Muhammad Qais Raza - Portfolio</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Muhammad Qais Raza - Portfolio">
+  <meta property="og:description" content="Computer Science student at the University of Lahore. Projects built with HTML, CSS and JavaScript.">
+  <meta property="og:image" content="https://qai975.github.io/My-first-repository/Snapchat-1131860101.jpg">
+  <meta property="og:url" content="https://qai975.github.io/My-first-repository">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { font-family: Arial, sans-serif; background: #070b16; color: #e8ecf5; text-align: center; padding: 20px 16px 40px; min-height: 100vh; }
-    .glow { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 10% 10%, rgba(10,125,59,0.45), transparent 45%), radial-gradient(circle at 90% 90%, rgba(139,63,217,0.45), transparent 45%); }
-    .me { display: block; width: 84px; height: 84px; margin: 0 auto 10px; border-radius: 50%; object-fit: cover; border: 3px solid #4da3ff; box-shadow: 0 0 22px rgba(77,163,255,0.55); }
-    h1 { font-size: 30px; background: linear-gradient(90deg, #35d07f, #4da3ff, #b57bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .sub { margin: 6px 0 14px; color: #9aa6c2; font-size: 14px; }
-    .bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-    .pill { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 30px; padding: 8px 14px; font-size: 14px; color: #e8ecf5; font-family: Arial, sans-serif; }
-    .pill b { font-size: 18px; color: #7dffb8; margin-left: 4px; }
-    .wrap { position: relative; width: fit-content; margin: 0 auto; }
-    canvas { display: block; border-radius: 18px; border: 2px solid rgba(77,163,255,0.5); box-shadow: 0 0 30px rgba(77,163,255,0.25); touch-action: none; }
-    #ov { position: absolute; inset: 0; border-radius: 18px; background: rgba(7,11,22,0.78); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
-    #ov h2 { font-size: 26px; color: #fff; }
-    #ov p { color: #9aa6c2; font-size: 14px; padding: 0 20px; }
-    .btn { border: none; border-radius: 30px; padding: 13px 34px; font-size: 17px; color: #fff; background: linear-gradient(90deg, #0a7d3b, #1e6fd9); }
-    .btn.alt { background: rgba(255,255,255,0.12); padding: 10px 24px; font-size: 14px; }
-    .pad { display: grid; grid-template-columns: repeat(3, 62px); grid-template-rows: repeat(2, 56px); gap: 8px; justify-content: center; margin-top: 16px; }
-    .pad button { border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; background: rgba(255,255,255,0.08); color: #fff; font-size: 22px; }
-    .pad button:active { background: rgba(77,163,255,0.35); }
-    .up { grid-column: 2; grid-row: 1; }
-    .left { grid-column: 1; grid-row: 2; }
-    .down { grid-column: 2; grid-row: 2; }
-    .right { grid-column: 3; grid-row: 2; }
-    .tip { margin-top: 12px; font-size: 12px; color: #8a96b3; }
-    footer { margin-top: 24px; font-size: 14px; color: #8a96b3; line-height: 1.8; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #070b16; color: #e8ecf5; text-align: center; overflow-x: hidden; }
+    .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.45; animation: float 12s ease-in-out infinite alternate; }
+    .b1 { width: 320px; height: 320px; background: #0a7d3b; top: -80px; left: -80px; }
+    .b2 { width: 300px; height: 300px; background: #1e6fd9; bottom: 5%; right: -90px; animation-delay: -4s; }
+    .b3 { width: 240px; height: 240px; background: #8b3fd9; top: 45%; left: -60px; animation-delay: -8s; }
+    @keyframes float { from { transform: translate(0, 0) scale(1); } to { transform: translate(40px, 60px) scale(1.2); } }
+
+    .hero { padding: 60px 20px 30px; }
+    .ring { width: 170px; height: 170px; margin: 0 auto 22px; border-radius: 50%; padding: 5px; background: conic-gradient(#0a7d3b, #1e6fd9, #8b3fd9, #f39c12, #0a7d3b); animation: spin 6s linear infinite; box-shadow: 0 0 35px rgba(30,111,217,0.5); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .ring .inner { width: 100%; height: 100%; border-radius: 50%; background: #070b16; padding: 4px; animation: spin 6s linear infinite reverse; }
+    .photo { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+
+    h1 { font-size: 34px; background: linear-gradient(90deg, #35d07f, #4da3ff, #b57bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .role { margin-top: 12px; font-size: 18px; min-height: 26px; color: #b9c3dc; }
+    .cursor { display: inline-block; width: 2px; height: 20px; background: #4da3ff; margin-left: 3px; vertical-align: middle; animation: blink 0.8s infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .uni { margin-top: 8px; font-size: 14px; color: #8a96b3; }
+
+    section { max-width: 520px; margin: 24px auto; padding: 0 18px; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+    section.show { opacity: 1; transform: none; }
+    .glass { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(12px); border-radius: 20px; padding: 24px 20px; }
+    h2 { font-size: 22px; margin-bottom: 14px; color: #fff; }
+    p { line-height: 1.7; color: #c8d0e4; font-size: 15px; }
+
+    .label { font-size: 13px; color: #8a96b3; margin: 12px 0 8px; letter-spacing: 1px; text-transform: uppercase; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .chip { padding: 8px 14px; border-radius: 30px; font-size: 14px; background: rgba(53,208,127,0.15); border: 1px solid rgba(53,208,127,0.5); color: #7dffb8; }
+    .chip.learn { background: rgba(77,163,255,0.15); border-color: rgba(77,163,255,0.5); color: #9bc8ff; }
+
+    .cards { display: grid; gap: 14px; }
+    .card { display: block; text-decoration: none; color: inherit; padding: 18px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); transition: all 0.3s; text-align: left; }
+    .card:hover, .card:active { transform: translateY(-5px); border-color: #4da3ff; box-shadow: 0 10px 28px rgba(77,163,255,0.3); }
+    .card h3 { font-size: 17px; color: #fff; margin-bottom: 6px; }
+    .card p { font-size: 14px; }
+    .tag { display: inline-block; margin-top: 10px; font-size: 12px; color: #4da3ff; }
+
+    footer { padding: 40px 20px 50px; font-size: 14px; color: #8a96b3; line-height: 1.8; }
     footer b { color: #fff; }
-    footer a { color: #4da3ff; text-decoration: none; }
   </style>
 </head>
 <body>
-  <div class="glow"></div>
-  <img class="me" src="https://qai975.github.io/My-first-repository/Snapchat-1131860101.jpg" alt="Muhammad Qais Raza">
-  <h1>Neon Snake</h1>
-  <div class="sub">Swipe on the board to move</div>
+  <div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
 
-  <div class="bar">
-    <div class="pill">Score <b id="score">0</b></div>
-    <div class="pill">Best <b id="best">0</b></div>
-  </div>
-  <div class="bar">
-    <button class="pill" id="snd">Sound: On</button>
-    <button class="pill" id="mus">Music: On</button>
+  <div class="hero">
+    <div class="ring"><div class="inner"><img class="photo" src="Snapchat-1131860101.jpg" alt="Muhammad Qais Raza"></div></div>
+    <h1>Muhammad Qais Raza</h1>
+    <div class="role"><span id="typed"></span><span class="cursor"></span></div>
+    <div class="uni">University of Lahore</div>
   </div>
 
-  <div class="wrap">
-    <canvas id="c"></canvas>
-    <div id="ov">
-      <h2 id="ovt">Ready?</h2>
-      <p id="ovp">Eat the glowing food. Do not hit the walls or yourself.</p>
-      <button class="btn" id="play">Play</button>
-      <button class="btn alt" id="share" style="display:none">Share my score</button>
+  <section>
+    <div class="glass">
+      <h2>About Me</h2>
+      <p>Hi, I am Muhammad Qais Raza, a Computer Science student at the University of Lahore. I love building things for the web and I am learning something new every day. So far I have built a portfolio website, a calculator, a to-do list and a snake game.</p>
     </div>
-  </div>
+  </section>
 
-  <div class="pad">
-    <button class="up" aria-label="Up" id="bu">&#9650;</button>
-    <button class="left" aria-label="Left" id="bl">&#9664;</button>
-    <button class="down" aria-label="Down" id="bd">&#9660;</button>
-    <button class="right" aria-label="Right" id="br">&#9654;</button>
-  </div>
-  <div class="tip">Arrow keys or WASD also work on a computer.</div>
+  <section>
+    <div class="glass">
+      <h2>Skills</h2>
+      <div class="label">Tools I use</div>
+      <div class="chips">
+        <span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span><span class="chip">Git and GitHub</span>
+      </div>
+      <div class="label">What I will learn in CS</div>
+      <div class="chips">
+        <span class="chip learn">Python</span><span class="chip learn">Data Structures</span><span class="chip learn">Algorithms</span><span class="chip learn">Object-Oriented Programming</span><span class="chip learn">Databases</span><span class="chip learn">Operating Systems</span><span class="chip learn">Computer Networks</span><span class="chip learn">Software Engineering</span><span class="chip learn">Problem Solving</span>
+      </div>
+    </div>
+  </section>
 
-  <footer>Made by <b>Muhammad Qais Raza</b><br>Computer Science Student, University of Lahore<br><a href="https://qai975.github.io/My-first-repository">View my portfolio</a></footer>
+  <section>
+    <div class="glass">
+      <h2>My Projects</h2>
+      <div class="cards">
+        <a class="card" href="https://qai975.github.io/calculator-">
+          <h3>Calculator</h3>
+          <p>A working calculator with a clean design. Add, subtract, multiply and divide.</p>
+          <span class="tag">HTML · CSS · JavaScript</span>
+        </a>
+        <a class="card" href="https://qai975.github.io/todo--list">
+          <h3>To-Do List</h3>
+          <p>Add, complete and delete tasks. Your tasks stay saved.</p>
+          <span class="tag">HTML · CSS · JavaScript</span>
+        </a>
+        <a class="card" href="https://qai975.github.io/neon-snake">
+          <h3>Neon Snake</h3>
+          <p>A snake game you can play on your phone. Swipe, eat, beat your best score, with sound and music.</p>
+          <span class="tag">HTML · CSS · JavaScript · Canvas</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>Made with passion by <b>Muhammad Qais Raza</b><br>Computer Science Student, University of Lahore</footer>
 
   <script>
-    var N = 20;
-    var S = Math.floor(Math.min(360, window.innerWidth - 36) / N) * N;
-    var cell = S / N;
-    var cv = document.getElementById('c');
-    cv.width = S; cv.height = S;
-    var ctx = cv.getContext('2d');
-
-    var snake, dir, nd, food, score, speed, timer, running = false;
-    var best = 0;
-    try { best = parseInt(localStorage.getItem('snakeBest'), 10) || 0; } catch (e) { best = 0; }
-    document.getElementById('best').textContent = best;
-
-    var soundOn = true, musicOn = true;
-    try {
-      soundOn = localStorage.getItem('snakeSound') !== 'off';
-      musicOn = localStorage.getItem('snakeMusic') !== 'off';
-    } catch (e) {}
-
-    var audio = null, master = null;
-    var scale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25];
-
-    function updBtns() {
-      document.getElementById('snd').textContent = soundOn ? 'Sound: On' : 'Sound: Off';
-      document.getElementById('mus').textContent = musicOn ? 'Music: On' : 'Music: Off';
+    var roles = ['Computer Science Student', 'Web Developer', 'Future Software Engineer'];
+    var r = 0, c = 0, del = false, el = document.getElementById('typed');
+    function type() {
+      var word = roles[r];
+      el.textContent = word.substring(0, c);
+      if (!del && c < word.length) { c++; setTimeout(type, 90); }
+      else if (!del) { del = true; setTimeout(type, 1400); }
+      else if (c > 0) { c--; setTimeout(type, 45); }
+      else { del = false; r = (r + 1) % roles.length; setTimeout(type, 300); }
     }
-    updBtns();
+    type();
 
-    function initAudio() {
-      if (!audio) {
-        var AC = window.AudioContext || window.webkitAudioContext;
-        if (AC) {
-          audio = new AC();
-          master = audio.createGain();
-          master.gain.value = 0.9;
-          var d = audio.createDelay();
-          d.delayTime.value = 0.16;
-          var fb = audio.createGain();
-          fb.gain.value = 0.28;
-          var wet = audio.createGain();
-          wet.gain.value = 0.35;
-          master.connect(audio.destination);
-          master.connect(d);
-          d.connect(fb);
-          fb.connect(d);
-          d.connect(wet);
-          wet.connect(audio.destination);
-        }
-      }
-      if (audio && audio.state === 'suspended') audio.resume();
+    var secs = document.querySelectorAll('section');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('show'); });
+      }, { threshold: 0.15 });
+      secs.forEach(function (s) { io.observe(s); });
+    } else {
+      secs.forEach(function (s) { s.classList.add('show'); });
     }
-
-    function tone(freq, start, dur, type, vol) {
-      if (!audio) return;
-      var t0 = audio.currentTime + start;
-      var o = audio.createOscillator();
-      var g = audio.createGain();
-      o.type = type || 'sine';
-      o.frequency.setValueAtTime(freq, t0);
-      g.gain.setValueAtTime(0.0001, t0);
-      g.gain.exponentialRampToValueAtTime(vol || 0.15, t0 + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-      o.connect(g);
-      g.connect(master);
-      o.start(t0);
-      o.stop(t0 + dur + 0.05);
-    }
-
-    function sndStart() {
-      if (!soundOn) return;
-      tone(scale[0], 0, 0.18, 'triangle', 0.2);
-      tone(scale[2], 0.1, 0.18, 'triangle', 0.2);
-      tone(scale[3], 0.2, 0.18, 'triangle', 0.2);
-      tone(scale[5], 0.3, 0.4, 'triangle', 0.22);
-    }
-    function sndEat() {
-      if (!soundOn) return;
-      var f = scale[score % scale.length] * 2;
-      tone(f, 0, 0.14, 'triangle', 0.22);
-      tone(f * 1.5, 0.06, 0.18, 'sine', 0.16);
-    }
-    function sndOver() {
-      if (!soundOn) return;
-      tone(scale[5], 0, 0.25, 'sine', 0.2);
-      tone(scale[3], 0.2, 0.25, 'sine', 0.2);
-      tone(scale[2], 0.4, 0.25, 'sine', 0.2);
-      tone(scale[0], 0.6, 0.6, 'sine', 0.22);
-    }
-
-    var pat = [0, 2, 4, 2, 5, 4, 2, 1], mi = 0, musicTimer = null;
-    function musicStop() { clearInterval(musicTimer); musicTimer = null; }
-    function musicStart() {
-      musicStop();
-      if (!musicOn || !audio) return;
-      mi = 0;
-      musicTimer = setInterval(function () {
-        if (!running || !musicOn) return;
-        var n = scale[pat[mi % pat.length]];
-        tone(n, 0, 0.4, 'sine', 0.05);
-        if (mi % 4 === 0) tone(n / 2, 0, 0.6, 'sine', 0.05);
-        mi++;
-      }, 280);
-    }
-
-    document.getElementById('snd').onclick = function () {
-      soundOn = !soundOn;
-      try { localStorage.setItem('snakeSound', soundOn ? 'on' : 'off'); } catch (e) {}
-      updBtns();
-      if (soundOn) { initAudio(); tone(scale[4], 0, 0.15, 'triangle', 0.2); }
-    };
-    document.getElementById('mus').onclick = function () {
-      musicOn = !musicOn;
-      try { localStorage.setItem('snakeMusic', musicOn ? 'on' : 'off'); } catch (e) {}
-      updBtns();
-      if (musicOn) { initAudio(); if (running) musicStart(); } else { musicStop(); }
-    };
-
-    function placeFood() {
-      while (true) {
-        var f = { x: Math.floor(Math.random() * N), y: Math.floor(Math.random() * N) };
-        var ok = true;
-        for (var i = 0; i < snake.length; i++) { if (snake[i].x === f.x && snake[i].y === f.y) { ok = false; break; } }
-        if (ok) { food = f; return; }
-      }
-    }
-
-    function start() {
-      initAudio();
-      sndStart();
-      snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
-      dir = { x: 1, y: 0 }; nd = dir;
-      score = 0; speed = 140;
-      document.getElementById('score').textContent = 0;
-      placeFood();
-      running = true;
-      document.getElementById('ov').style.display = 'none';
-      clearInterval(timer);
-      timer = setInterval(tick, speed);
-      musicStart();
-      draw();
-    }
-
-    function setDir(x, y) {
-      if (!running) return;
-      if (x === -dir.x && y === -dir.y) return;
-      nd = { x: x, y: y };
-    }
-
-    function tick() {
-      dir = nd;
-      var h = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-      if (h.x < 0 || h.y < 0 || h.x >= N || h.y >= N) return over();
-      for (var i = 0; i < snake.length; i++) { if (snake[i].x === h.x && snake[i].y === h.y) return over(); }
-      snake.unshift(h);
-      if (h.x === food.x && h.y === food.y) {
-        score++;
-        sndEat();
-        document.getElementById('score').textContent = score;
-        placeFood();
-        if (score % 5 === 0 && speed > 70) {
-          speed -= 10;
-          clearInterval(timer);
-          timer = setInterval(tick, speed);
-        }
-      } else {
-        snake.pop();
-      }
-      draw();
-    }
-
-    function over() {
-      running = false;
-      clearInterval(timer);
-      musicStop();
-      sndOver();
-      if (score > best) {
-        best = score;
-        document.getElementById('best').textContent = best;
-        try { localStorage.setItem('snakeBest', best); } catch (e) {}
-      }
-      document.getElementById('ovt').textContent = 'Game over';
-      document.getElementById('ovp').textContent = 'Your score: ' + score + '  |  Best: ' + best;
-      document.getElementById('play').textContent = 'Play again';
-      if (navigator.share) document.getElementById('share').style.display = 'block';
-      document.getElementById('ov').style.display = 'flex';
-    }
-
-    function draw() {
-      ctx.fillStyle = '#0b1020';
-      ctx.fillRect(0, 0, S, S);
-      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-      ctx.lineWidth = 1;
-      for (var i = 1; i < N; i++) {
-        ctx.beginPath(); ctx.moveTo(i * cell, 0); ctx.lineTo(i * cell, S); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(0, i * cell); ctx.lineTo(S, i * cell); ctx.stroke();
-      }
-      ctx.shadowColor = '#f39c12';
-      ctx.shadowBlur = 14;
-      ctx.fillStyle = '#f39c12';
-      ctx.beginPath();
-      ctx.arc(food.x * cell + cell / 2, food.y * cell + cell / 2, cell * 0.36, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
-      for (var j = snake.length - 1; j >= 0; j--) {
-        var hue = 150 + (j * 6) % 120;
-        ctx.fillStyle = j === 0 ? '#ffffff' : 'hsl(' + hue + ',80%,55%)';
-        var p = 2;
-        ctx.fillRect(snake[j].x * cell + p, snake[j].y * cell + p, cell - p * 2, cell - p * 2);
-      }
-    }
-
-    document.getElementById('play').onclick = start;
-    document.getElementById('bu').onclick = function () { setDir(0, -1); };
-    document.getElementById('bd').onclick = function () { setDir(0, 1); };
-    document.getElementById('bl').onclick = function () { setDir(-1, 0); };
-    document.getElementById('br').onclick = function () { setDir(1, 0); };
-
-    document.getElementById('share').onclick = function () {
-      navigator.share({ title: 'Neon Snake', text: 'I scored ' + score + ' in Neon Snake. Can you beat me?', url: location.href });
-    };
-
-    document.addEventListener('keydown', function (e) {
-      var k = e.key;
-      if (k === 'ArrowUp' || k === 'w' || k === 'W') { setDir(0, -1); e.preventDefault(); }
-      else if (k === 'ArrowDown' || k === 's' || k === 'S') { setDir(0, 1); e.preventDefault(); }
-      else if (k === 'ArrowLeft' || k === 'a' || k === 'A') { setDir(-1, 0); e.preventDefault(); }
-      else if (k === 'ArrowRight' || k === 'd' || k === 'D') { setDir(1, 0); e.preventDefault(); }
-    });
-
-    var sx = 0, sy = 0;
-    cv.addEventListener('touchstart', function (e) {
-      sx = e.touches[0].clientX; sy = e.touches[0].clientY;
-      e.preventDefault();
-    }, { passive: false });
-    cv.addEventListener('touchend', function (e) {
-      var dx = e.changedTouches[0].clientX - sx;
-      var dy = e.changedTouches[0].clientY - sy;
-      if (Math.abs(dx) < 15 && Math.abs(dy) < 15) return;
-      if (Math.abs(dx) > Math.abs(dy)) setDir(dx > 0 ? 1 : -1, 0);
-      else setDir(0, dy > 0 ? 1 : -1);
-      e.preventDefault();
-    }, { passive: false });
-
-    snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
-    dir = { x: 1, y: 0 }; nd = dir;
-    food = { x: 15, y: 10 };
-    draw();
   </script>
 </body>
 </html>
